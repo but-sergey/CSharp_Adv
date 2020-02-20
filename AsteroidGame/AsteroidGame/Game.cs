@@ -30,5 +30,16 @@ namespace AsteroidGame
             Graphics g = form.CreateGraphics();
             __Buffer = __Context.Allocate(g, new Rectangle(0, 0, Width, Height));
         }
+
+        public static void Draw()
+        {
+            var g = __Buffer.Graphics;
+            g.Clear(Color.Black);
+
+            g.DrawRectangle(Pens.White, new Rectangle(50, 50, 200, 200));
+            g.FillEllipse(Brushes.Red, new Rectangle(100, 50, 70, 120));
+
+            __Buffer.Render();
+        }
     }
 }
