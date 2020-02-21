@@ -12,9 +12,20 @@ namespace AsteroidGame
     {
         private static BufferedGraphicsContext __Context;
         private static BufferedGraphics __Buffer;
+        private static int _MinSize = 5;
+        private static int _MaxSize = 20;
+        private static int _MinSpeed = 1;
+        private static int _MaxSpeed = 10;
+        //private static Image _Star = Image.FromFile("..\\..\\star.jpg");
 
         public static int Width { get; set; }
         public static int Height { get; set; }
+
+        public static int MinSize { get { return _MinSize; } }
+        public static int MaxSize { get { return _MaxSize; } }
+        public static int MinSpeed { get { return _MinSpeed; } }
+        public static int MaxSpeed { get { return _MaxSpeed; } }
+        //public static Image Star { get { return _Star; } }
 
         //static Game()
         //{
@@ -45,14 +56,14 @@ namespace AsteroidGame
 
         public static void Load()
         {
-            __GameObjects = new VisualObject[30];
-            for (var i = 0; i < __GameObjects.Length / 2; i++)
+            Random rand = new Random();
+
+            __GameObjects = new VisualObject[75];
+            for (var i = 0; i < __GameObjects.Length; i++)
             {
-                __GameObjects[i] = new VisualObject(new Point(600, i * 20), new Point(15 - i, 20 - i), new Size(20, 20));
-            }
-            for (var i = __GameObjects.Length / 2; i < __GameObjects.Length; i++)
-            {
-                __GameObjects[i] = new Star(new Point(600, i * 20), new Point(-i, 0), 20);
+                __GameObjects[i] = new Star(new Point(rand.Next(0, Width), rand.Next(0, Height)),
+                                            new Point(rand.Next(-_MaxSpeed, -_MinSpeed), 0),
+                                            rand.Next(_MinSize, _MaxSize));
             }
         }
 
@@ -60,9 +71,6 @@ namespace AsteroidGame
         {
             var g = __Buffer.Graphics;
             g.Clear(Color.Black);
-
-            //g.DrawRectangle(Pens.White, new Rectangle(50, 50, 200, 200));
-            //g.FillEllipse(Brushes.Red, new Rectangle(100, 50, 70, 120));
 
             foreach (var visual_object in __GameObjects)
                 visual_object.Draw(g);
