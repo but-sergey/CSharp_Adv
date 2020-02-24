@@ -9,7 +9,8 @@ namespace AsteroidGame.VisualObjects
 {
     class Star : VisualObject
     {
-        private static Image _Star = Image.FromFile("img\\star.jpg");
+        //private static Image _Star = Image.FromFile("img\\star.jpg");
+        private static Image _Star = Properties.Resources.star;
 
         public Star(Point Position, Point Direction, int Size)
             : base(Position, Direction, new Size(Size, Size))
@@ -32,7 +33,7 @@ namespace AsteroidGame.VisualObjects
             {
                 _Position.X = Game.Width + _Size.Width;
                 _Position.Y = rand.Next(0, Game.Height);
-                _Direction.X = rand.Next(-Game.max_speed, -Game.min_speed);
+                _Direction.X = rand.Next(-Game.star_max_speed, -Game.star_min_speed);
             }
         }
     }

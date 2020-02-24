@@ -13,12 +13,18 @@ namespace AsteroidGame
     {
         private static BufferedGraphicsContext __Context;
         private static BufferedGraphics __Buffer;
+
+        private const int frame_timeout = 10;
         
-        public const int min_size = 5;
-        public const int max_size = 20;
-        public const int min_speed = 1;
-        public const int max_speed = 10;
-        public const int stars_count = 75;
+        public const int star_min_size = 5;
+        public const int star_max_size = 15;
+        public const int star_min_speed = 1;
+        public const int star_max_speed = 3;
+        public const int star_count = 75;
+
+        public const int asteroid_size = 40;
+        public const int asteroid_speed = 7;
+        public const int asteroid_count = 5;
 
         public static int Width { get; set; }
         public static int Height { get; set; }
@@ -32,7 +38,7 @@ namespace AsteroidGame
             Graphics g = form.CreateGraphics();
             __Buffer = __Context.Allocate(g, new Rectangle(0, 0, Width, Height));
 
-            var timer = new Timer { Interval = 100 };
+            var timer = new Timer { Interval = frame_timeout };
             timer.Tick += OnTimerTick;
             timer.Start();
         }
@@ -44,21 +50,30 @@ namespace AsteroidGame
         }
 
         private static VisualObject[] __GameObjects;
+        private static Bullet __Bullet;
 
         public static void Load()
         {
             Random rand = new Random();
 
             var game_objects = new List<VisualObject>();
-            
-            for (var i = 0; i < stars_count; i++)
+
+            for (var i = 0; i < star_count; i++)
             {
                 game_objects.Add(new Star(new Point(rand.Next(0, Width), rand.Next(0, Height)),
-                                            new Point(rand.Next(-max_speed, -min_speed), 0),
-                                            rand.Next(min_size, max_size)));
+                                            new Point(rand.Next(-star_max_speed, -star_min_speed), 0),
+                                            rand.Next(star_min_size, star_max_size)));
+            }
+
+            for (var i = 0; i < asteroid_count; i++)
+            {
+                game_objects.Add(new Asteroid(new Point(rand.Next(100, Width), rand.Next(0, Height)),
+                                            new Point(-asteroid_speed, 0),
+                                            asteroid_size));
             }
 
             __GameObjects = game_objects.ToArray();
+            __Bullet = new Bullet(200);
         }
 
         public static void Draw()
@@ -69,6 +84,8 @@ namespace AsteroidGame
             foreach (var visual_object in __GameObjects)
                 visual_object.Draw(g);
 
+            __Bullet.Draw(g);
+
             __Buffer.Render();
         }
 
@@ -76,6 +93,10 @@ namespace AsteroidGame
         {
             foreach (var visual_object in __GameObjects)
                 visual_object.Update();
+
+            __Bullet.Update();
+            if (__Bullet.Position.X > Width)
+                __Bullet = new Bullet(200);
         }
     }
 }
