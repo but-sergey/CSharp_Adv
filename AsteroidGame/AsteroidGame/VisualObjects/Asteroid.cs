@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AsteroidGame.VisualObjects.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -7,11 +8,13 @@ using System.Threading.Tasks;
 
 namespace AsteroidGame.VisualObjects
 {
-    public class Asteroid : ImageObject
+    public class Asteroid : ImageObject, ICollision
     {
         public Asteroid(Point Position, Point Direction, int ImageSize) : base(Position, Direction, new Size(ImageSize, ImageSize), Properties.Resources.asteroid)
         {
         }
+
+        public bool CheckCollision(ICollision obj) => Rect.IntersectsWith(obj.Rect)
 
         public override void Update()
         {
