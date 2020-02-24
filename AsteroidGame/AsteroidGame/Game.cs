@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
+using AsteroidGame.VisualObjects;
 
 namespace AsteroidGame
 {
@@ -12,25 +13,15 @@ namespace AsteroidGame
     {
         private static BufferedGraphicsContext __Context;
         private static BufferedGraphics __Buffer;
-        private static int _MinSize = 5;
-        private static int _MaxSize = 20;
-        private static int _MinSpeed = 1;
-        private static int _MaxSpeed = 10;
-        //private static Image _Star = Image.FromFile("..\\..\\star.jpg");
+        
+        public const int min_size = 5;
+        public const int max_size = 20;
+        public const int min_speed = 1;
+        public const int max_speed = 10;
+        public const int stars_count = 75;
 
         public static int Width { get; set; }
         public static int Height { get; set; }
-
-        public static int MinSize { get { return _MinSize; } }
-        public static int MaxSize { get { return _MaxSize; } }
-        public static int MinSpeed { get { return _MinSpeed; } }
-        public static int MaxSpeed { get { return _MaxSpeed; } }
-        //public static Image Star { get { return _Star; } }
-
-        //static Game()
-        //{
-
-        //}
 
         public static void Initialize(Form form)
         {
@@ -58,13 +49,16 @@ namespace AsteroidGame
         {
             Random rand = new Random();
 
-            __GameObjects = new VisualObject[75];
-            for (var i = 0; i < __GameObjects.Length; i++)
+            var game_objects = new List<VisualObject>();
+            
+            for (var i = 0; i < stars_count; i++)
             {
-                __GameObjects[i] = new Star(new Point(rand.Next(0, Width), rand.Next(0, Height)),
-                                            new Point(rand.Next(-_MaxSpeed, -_MinSpeed), 0),
-                                            rand.Next(_MinSize, _MaxSize));
+                game_objects.Add(new Star(new Point(rand.Next(0, Width), rand.Next(0, Height)),
+                                            new Point(rand.Next(-max_speed, -min_speed), 0),
+                                            rand.Next(min_size, max_size)));
             }
+
+            __GameObjects = game_objects.ToArray();
         }
 
         public static void Draw()
