@@ -41,6 +41,11 @@ namespace AsteroidGame
             Width = form.Width;
             Height = form.Height;
 
+            if (Width > 1500 || Width < 0)
+                throw new ArgumentOutOfRangeException("Ширина игрового поля меньше 0 или более 1500");
+            if (Height > 1000 || Height < 0)
+                throw new ArgumentOutOfRangeException("Высота игрового поля меньше 0 или более 1000");
+
             __Context = BufferedGraphicsManager.Current;
             Graphics g = form.CreateGraphics();
             __Buffer = __Context.Allocate(g, new Rectangle(0, 0, Width, Height));
@@ -122,8 +127,8 @@ namespace AsteroidGame
                         __GameObjects[i] = new Asteroid(new Point(rand.Next(Width, 2 * Width), rand.Next(0, Height)),
                                             new Point(-asteroid_speed, 0),
                                             asteroid_size);
-            //MessageBox.Show("Астероид уничтожен!", "Столкновение", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-        }
+                        //MessageBox.Show("Астероид уничтожен!", "Столкновение", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    }
                 }
             }
         }
