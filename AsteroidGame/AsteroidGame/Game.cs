@@ -18,18 +18,20 @@ namespace AsteroidGame
         private const int frame_timeout = 10;
 
         public const int moon_height = -100;
-        public const int moon_size = 500;
+        public const int moon_min_size = 200;
+        public const int moon_max_size = 700;
         public const int moon_speed = 1;
         
         public const int star_min_size = 5;
-        public const int star_max_size = 15;
+        public const int star_max_size = 10;
         public const int star_min_speed = 1;
         public const int star_max_speed = 3;
         public const int star_count = 50;
+        public static Pen star_pen = Pens.DarkGray;
 
-        public const int asteroid_size = 40;
+        public const int asteroid_size = 50;
         public const int asteroid_speed = 3;
-        public const int asteroid_count = 5;
+        public const int asteroid_count = 10;
 
         public static int Width { get; set; }
         public static int Height { get; set; }
@@ -64,13 +66,13 @@ namespace AsteroidGame
             var game_objects = new List<VisualObject>();
 
             game_objects.Add(new Moon(new Point(Game.Width, moon_height),
-                          new Point(-moon_speed, 0), moon_size));
+                          new Point(-moon_speed, 0), rand.Next(moon_min_size, moon_max_size)));
 
             for (var i = 0; i < star_count; i++)
             {
                 game_objects.Add(new Star(new Point(rand.Next(0, Width), rand.Next(0, Height)),
                                             new Point(rand.Next(-star_max_speed, -star_min_speed), 0),
-                                            rand.Next(star_min_size, star_max_size)));
+                                            rand.Next(star_min_size, star_max_size), star_pen));
             }
 
             for (var i = 0; i < asteroid_count; i++)
@@ -116,7 +118,7 @@ namespace AsteroidGame
                     {
                         __Bullet = new Bullet(new Random().Next(Height));
                         __GameObjects[i] = null;
-                        MessageBox.Show("Астероид уничтожен!", "Столкновение", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        //MessageBox.Show("Астероид уничтожен!", "Столкновение", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     }
                 }
             }

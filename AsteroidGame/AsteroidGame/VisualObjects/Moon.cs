@@ -16,10 +16,15 @@ namespace AsteroidGame.VisualObjects
 
         public override void Update()
         {
+            Random rand = new Random();
+
             _Position.X += _Direction.X;
             if (_Position.X < -_Size.Width)
             {
                 _Position.X = Game.Width;
+                _Position.Y = rand.Next(-100, Game.Height - 100);
+                _Size.Height = rand.Next(200, 500);
+                _Size.Width = _Size.Height;
             }
 
         }

@@ -93,12 +93,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\star.png" />
     <None Include="Resources\asteroid.png" />
-    <Content Include="Resources\star.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\asteroid.jpg" />
     <Content Include="Resources\moon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
