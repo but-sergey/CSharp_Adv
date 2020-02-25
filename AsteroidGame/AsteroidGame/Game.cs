@@ -17,6 +17,8 @@ namespace AsteroidGame
 
         private const int frame_timeout = 10;
 
+        public const int max_size = 1000;
+
         public const int moon_height = -100;
         public const int moon_min_size = 200;
         public const int moon_max_size = 700;
@@ -36,6 +38,8 @@ namespace AsteroidGame
         public static int Width { get; set; }
         public static int Height { get; set; }
 
+        private static Timer timer = new Timer();
+
         public static void Initialize(Form form)
         {
             Width = form.Width;
@@ -50,9 +54,10 @@ namespace AsteroidGame
             Graphics g = form.CreateGraphics();
             __Buffer = __Context.Allocate(g, new Rectangle(0, 0, Width, Height));
 
-            var timer = new Timer { Interval = frame_timeout };
+            //var timer = new Timer { Interval = frame_timeout };
+            timer.Interval = frame_timeout;
             timer.Tick += OnTimerTick;
-            timer.Start();
+            //timer.Start();
         }
 
         private static void OnTimerTick(object sender, EventArgs e)
@@ -89,6 +94,8 @@ namespace AsteroidGame
 
             __GameObjects = game_objects.ToArray();
             __Bullet = new Bullet(200);
+
+            timer.Start();
         }
 
         public static void Draw()

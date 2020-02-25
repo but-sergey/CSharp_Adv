@@ -1,9 +1,11 @@
-﻿using System;
+﻿using AsteroidGame.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace AsteroidGame.VisualObjects
 {
@@ -21,7 +23,18 @@ namespace AsteroidGame.VisualObjects
         {
             _Position = Position;
             _Direction = Direction;
-            _Size = Size;
+            try
+            {
+                _Size = Size;
+                if (_Size.Width > Game.max_size || _Size.Height > Game.max_size)
+                    throw new VisualObjectSizeException();
+            }
+            catch(VisualObjectSizeException)
+            {
+                MessageBox.Show("Перехвачено: Размер объекта слишком большой!", "Создание объекта", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+
         }
 
         public abstract void Draw(Graphics g);
