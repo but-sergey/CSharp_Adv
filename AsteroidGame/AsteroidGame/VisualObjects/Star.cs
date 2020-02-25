@@ -12,8 +12,8 @@ namespace AsteroidGame.VisualObjects
         //private static Image _Star = Image.FromFile("img\\star.jpg");
         private static Image _Star = Properties.Resources.star;
 
-        public Star(Point Position, Point Direction, int Size)
-            : base(Position, Direction, new Size(Size, Size))
+        public Star(Point Position, Point Direction, int StarSize)
+            : base(Position, Direction, new Size(StarSize, StarSize))
         {
         }
 
@@ -22,6 +22,12 @@ namespace AsteroidGame.VisualObjects
             g.DrawImage(_Star,
                 _Position.X, _Position.Y,
                 _Size.Width, _Size.Height);
+            //var p1 = Position;
+            //var p2 = new Point(p1.X + _Size.Width, p1.Y + _Size.Height);
+            //var p3 = new Point(p1.X, p1.Y + _Size.Height);
+            //var p4 = new Point(p1.X + _Size.Width, p1.Y);
+            //g.DrawLine(Pens.Gray, p1, p2);
+            //g.DrawLine(Pens.Gray, p3, p4);
         }
 
         public override void Update()

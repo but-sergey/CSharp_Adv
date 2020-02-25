@@ -16,15 +16,19 @@ namespace AsteroidGame
         private static BufferedGraphics __Buffer;
 
         private const int frame_timeout = 10;
+
+        public const int moon_height = -100;
+        public const int moon_size = 500;
+        public const int moon_speed = 1;
         
         public const int star_min_size = 5;
         public const int star_max_size = 15;
         public const int star_min_speed = 1;
         public const int star_max_speed = 3;
-        public const int star_count = 75;
+        public const int star_count = 50;
 
         public const int asteroid_size = 40;
-        public const int asteroid_speed = 7;
+        public const int asteroid_speed = 3;
         public const int asteroid_count = 5;
 
         public static int Width { get; set; }
@@ -52,12 +56,15 @@ namespace AsteroidGame
 
         private static VisualObject[] __GameObjects;
         private static Bullet __Bullet;
-
+        
         public static void Load()
         {
             Random rand = new Random();
 
             var game_objects = new List<VisualObject>();
+
+            game_objects.Add(new Moon(new Point(Game.Width, moon_height),
+                          new Point(-moon_speed, 0), moon_size));
 
             for (var i = 0; i < star_count; i++)
             {
