@@ -22,14 +22,14 @@ namespace AsteroidGame
         public const int moon_max_size = 700;
         public const int moon_speed = 1;
         
-        public const int star_min_size = 5;
-        public const int star_max_size = 10;
+        public const int star_min_size = 3;
+        public const int star_max_size = 15;
         public const int star_min_speed = 1;
-        public const int star_max_speed = 3;
+        public const int star_max_speed = 5;
         public const int star_count = 50;
         public static Pen star_pen = Pens.DarkGray;
 
-        public const int asteroid_size = 50;
+        public const int asteroid_size = 60;
         public const int asteroid_speed = 3;
         public const int asteroid_count = 10;
 
@@ -77,7 +77,7 @@ namespace AsteroidGame
 
             for (var i = 0; i < asteroid_count; i++)
             {
-                game_objects.Add(new Asteroid(new Point(rand.Next(100, Width), rand.Next(0, Height)),
+                game_objects.Add(new Asteroid(new Point(rand.Next(500, 500 + Width), rand.Next(0, Height)),
                                             new Point(-asteroid_speed, 0),
                                             asteroid_size));
             }
@@ -101,6 +101,8 @@ namespace AsteroidGame
 
         public static void Update()
         {
+            Random rand = new Random();
+
             foreach (var visual_object in __GameObjects)
                 visual_object?.Update();
 
@@ -117,9 +119,11 @@ namespace AsteroidGame
                     if(__Bullet.CheckCollision(collision_object))
                     {
                         __Bullet = new Bullet(new Random().Next(Height));
-                        __GameObjects[i] = null;
-                        //MessageBox.Show("Астероид уничтожен!", "Столкновение", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    }
+                        __GameObjects[i] = new Asteroid(new Point(rand.Next(Width, 2 * Width), rand.Next(0, Height)),
+                                            new Point(-asteroid_speed, 0),
+                                            asteroid_size);
+            //MessageBox.Show("Астероид уничтожен!", "Столкновение", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        }
                 }
             }
         }

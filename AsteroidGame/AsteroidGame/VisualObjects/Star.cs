@@ -24,11 +24,11 @@ namespace AsteroidGame.VisualObjects
             //g.DrawImage(_Star,
             //    _Position.X, _Position.Y,
             //    _Size.Width, _Size.Height);
-            var p1 = new Point((int)(Position.X + 0.15 * _Size.Width), (int)(Position.Y + 0.15 * _Size.Height));
-            var p2 = new Point((int)(Position.X + 0.85 * _Size.Width), (int)(Position.Y + 0.85 * _Size.Height));
+            var p1 = new Point((int)(Position.X + 0.1 * _Size.Width), (int)(Position.Y + 0.1 * _Size.Height));
+            var p2 = new Point((int)(Position.X + 0.9 * _Size.Width), (int)(Position.Y + 0.9 * _Size.Height));
             
-            var p3 = new Point((int)(Position.X + 0.15 * _Size.Width), (int)(Position.Y + 0.85 * _Size.Height));
-            var p4 = new Point((int)(Position.X + 0.85 * _Size.Width), (int)(Position.Y + 0.15 * _Size.Height));
+            var p3 = new Point((int)(Position.X + 0.1 * _Size.Width), (int)(Position.Y + 0.9 * _Size.Height));
+            var p4 = new Point((int)(Position.X + 0.9 * _Size.Width), (int)(Position.Y + 0.1 * _Size.Height));
 
             var p5 = new Point(Position.X + _Size.Width / 2, Position.Y);
             var p6 = new Point(Position.X + _Size.Width / 2, Position.Y + _Size.Height);
@@ -46,12 +46,11 @@ namespace AsteroidGame.VisualObjects
         {
             Random rand = new Random();
 
-            _Position.X += _Direction.X;
+            _Position = new Point(_Position.X + _Direction.X, _Position.Y);
             if (_Position.X < 0)
             {
-                _Position.X = Game.Width + _Size.Width;
-                _Position.Y = rand.Next(0, Game.Height);
-                _Direction.X = rand.Next(-Game.star_max_speed, -Game.star_min_speed);
+                _Position = new Point(Game.Width + _Size.Width, rand.Next(0, Game.Height));
+                _Direction = new Point(rand.Next(-Game.star_max_speed, -Game.star_min_speed), 0);
             }
         }
     }

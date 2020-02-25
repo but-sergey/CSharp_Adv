@@ -20,12 +20,10 @@ namespace AsteroidGame.VisualObjects
         {
             Random rand = new Random();
 
-            _Position.X += _Direction.X;
-            if (_Position.X < 0)
+            _Position = new Point(_Position.X + _Direction.X, _Position.Y);
+            if (_Position.X < -_Size.Width)
             {
-                _Position.X = Game.Width + _Size.Width;
-                _Position.Y = rand.Next(0, Game.Height);
-                //_Direction.X = rand.Next(-Game.star_max_speed, -Game.star_min_speed);
+                _Position = new Point(Game.Width + _Size.Width, rand.Next(0, Game.Height));
             }
         }
 
