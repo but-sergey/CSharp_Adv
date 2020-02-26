@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="VisualObjects\Back.cs" />
     <Compile Include="Exceptions\VisualObjectSizeException.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="MainForm.cs">
@@ -97,6 +98,7 @@
     <None Include="Resources\asteroid.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\background.jpg" />
     <Content Include="Resources\moon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

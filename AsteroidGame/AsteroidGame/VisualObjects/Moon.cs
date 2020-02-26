@@ -16,15 +16,12 @@ namespace AsteroidGame.VisualObjects
 
         public override void Update()
         {
-            Random rand = new Random();
-
-            _Position.X += _Direction.X;
+            _Position = new Point(_Position.X +_Direction.X, Position.Y);
             if (_Position.X < -_Size.Width)
             {
-                _Position.X = Game.Width;
-                _Position.Y = rand.Next(-100, Game.Height - 100);
-                _Size.Height = rand.Next(200, 500);
-                _Size.Width = _Size.Height;
+                _Position = new Point(Game.Width, Game.rand.Next(-100, Game.Height - 100));
+                int TempSize = Game.rand.Next(Game.moon_min_size, Game.moon_max_size);
+                _Size = new Size(TempSize, TempSize);
             }
 
         }

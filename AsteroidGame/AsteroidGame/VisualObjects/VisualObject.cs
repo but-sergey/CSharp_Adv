@@ -26,8 +26,8 @@ namespace AsteroidGame.VisualObjects
             try
             {
                 _Size = Size;
-                if (_Size.Width > Game.max_size || _Size.Height > Game.max_size)
-                    throw new VisualObjectSizeException();
+//                if (_Size.Width > Game.max_size || _Size.Height > Game.max_size)
+//                    throw new VisualObjectSizeException();
             }
             catch(VisualObjectSizeException)
             {

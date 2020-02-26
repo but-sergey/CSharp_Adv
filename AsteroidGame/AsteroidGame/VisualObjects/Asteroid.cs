@@ -18,12 +18,10 @@ namespace AsteroidGame.VisualObjects
 
         public override void Update()
         {
-            Random rand = new Random();
-
             _Position = new Point(_Position.X + _Direction.X, _Position.Y);
             if (_Position.X < -_Size.Width)
             {
-                _Position = new Point(Game.Width + _Size.Width, rand.Next(0, Game.Height));
+                _Position = new Point(Game.Width + _Size.Width, Game.rand.Next(0, Game.Height));
             }
         }
 
