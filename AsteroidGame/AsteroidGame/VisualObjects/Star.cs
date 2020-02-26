@@ -9,31 +9,41 @@ namespace AsteroidGame.VisualObjects
 {
     class Star : VisualObject
     {
-        //private static Image _Star = Image.FromFile("img\\star.jpg");
-        private static Image _Star = Properties.Resources.star;
-
-        public Star(Point Position, Point Direction, int Size)
-            : base(Position, Direction, new Size(Size, Size))
+        public Star(Point Position, Point Direction, int StarSize)
+            : base(Position, Direction, new Size(StarSize, StarSize))
         {
         }
 
         public override void Draw(Graphics g)
         {
-            g.DrawImage(_Star,
-                _Position.X, _Position.Y,
-                _Size.Width, _Size.Height);
+            var p1 = new Point((int)(_Position.X - 0.4 * _Size.Width), (int)(_Position.Y - 0.4 * _Size.Height));
+            var p2 = new Point((int)(_Position.X + 0.4 * _Size.Width), (int)(_Position.Y + 0.4 * _Size.Height));
+            
+            var p3 = new Point((int)(_Position.X - 0.4 * _Size.Width), (int)(_Position.Y + 0.4 * _Size.Height));
+            var p4 = new Point((int)(_Position.X + 0.4 * _Size.Width), (int)(_Position.Y - 0.4 * _Size.Height));
+
+            var p5 = new Point(_Position.X, _Position.Y - _Size.Height / 2);
+            var p6 = new Point(_Position.X, _Position.Y + _Size.Height / 2);
+
+            var p7 = new Point(_Position.X - _Size.Width / 2, _Position.Y);
+            var p8 = new Point(_Position.X + _Size.Width / 2, _Position.Y);
+            
+            g.DrawLine(Game.star_pen, p1, p2);
+            g.DrawLine(Game.star_pen, p3, p4);
+            g.DrawLine(Game.star_pen, p5, p6);
+            g.DrawLine(Game.star_pen, p7, p8);
+            g.FillEllipse(Game.star_brush,
+                        new Rectangle(new Point((int)(_Position.X - 0.3 * _Size.Width), (int)(_Position.Y - 0.3 * _Size.Height)),
+                        new Size((int)(0.6 * _Size.Width), (int)(0.6 * _Size.Height))));
         }
 
         public override void Update()
         {
-            Random rand = new Random();
-
-            _Position.X += _Direction.X;
+            _Position = new Point(_Position.X + _Direction.X, _Position.Y);
             if (_Position.X < 0)
             {
-                _Position.X = Game.Width + _Size.Width;
-                _Position.Y = rand.Next(0, Game.Height);
-                _Direction.X = rand.Next(-Game.star_max_speed, -Game.star_min_speed);
+                _Position = new Point(Game.Width, Game.rand.Next(0, Game.Height));
+                _Direction = new Point(-Game.rand.Next(Game.star_min_speed, Game.star_max_speed), 0);
             }
         }
     }

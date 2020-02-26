@@ -18,7 +18,7 @@ namespace AsteroidGame
             Application.SetCompatibleTextRenderingDefault(false);
 
             var form = new Form();
-            form.Width = 800;
+            form.Width = 1200;
             form.Height = 600;
 
             form.Show();

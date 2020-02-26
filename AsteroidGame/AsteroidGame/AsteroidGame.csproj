@@ -46,6 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="VisualObjects\Back.cs" />
+    <Compile Include="Exceptions\VisualObjectSizeException.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -61,6 +63,7 @@
     <Compile Include="VisualObjects\EllipseObject.cs" />
     <Compile Include="VisualObjects\ImageObject.cs" />
     <Compile Include="VisualObjects\Interfaces\ICollision.cs" />
+    <Compile Include="VisualObjects\Moon.cs" />
     <Compile Include="VisualObjects\SpaceShip.cs" />
     <Compile Include="VisualObjects\Star.cs" />
     <Compile Include="VisualObjects\VisualObject.cs" />
@@ -92,12 +95,11 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\star.jpg" />
+    <None Include="Resources\asteroid.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\asteroid.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <None Include="Resources\background.jpg" />
+    <Content Include="Resources\moon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
