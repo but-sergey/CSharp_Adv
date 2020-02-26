@@ -5,27 +5,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AsteroidGame
+namespace AsteroidGame.VisualObjects
 {
-    class VisualObject
+    class EllipseObject : VisualObject
     {
-        protected Point _Position;
-        protected Point _Direction;
-        protected Size _Size;
-
-        public VisualObject(Point Position, Point Direction, Size Size)
+        public EllipseObject(Point Position, Point Direction, Size Size) : base(Position, Direction, Size)
         {
-            _Position = Position;
-            _Direction = Direction;
-            _Size = Size;
+
         }
 
-        public virtual void Draw(Graphics g)
+        public override void Draw(Graphics g)
         {
-            g.DrawEllipse(Pens.White, _Position.X, _Position.Y, _Size.Width, _Size.Width);
+            g.DrawEllipse(Pens.White, Rect);
         }
 
-        public virtual void Update()
+        public override void Update()
         {
             _Position = new Point(_Position.X + _Direction.X, _Position.Y + _Direction.Y);
 
@@ -39,5 +33,6 @@ namespace AsteroidGame
                 _Direction = new Point(_Direction.X, -_Direction.Y);
 
         }
+
     }
 }

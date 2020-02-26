@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{88D845EE-3A32-4FD9-A5D6-F3A39F06584A}</ProjectGuid>
+    <ProjectGuid>{69DFEAA6-3DE9-4B6E-80C6-6990F441B405}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>TestConsole</RootNamespace>
-    <AssemblyName>TestConsole</AssemblyName>
+    <RootNamespace>Workers</RootNamespace>
+    <AssemblyName>Workers</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -43,18 +43,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Gamer.cs" />
-    <Compile Include="Loggers\DebugLogger.cs" />
-    <Compile Include="Loggers\FileLogger.cs" />
-    <Compile Include="Loggers\ILogger.cs" />
-    <Compile Include="Loggers\ListLogger.cs" />
-    <Compile Include="Loggers\Logger.cs" />
-    <Compile Include="Loggers\TraceLogger.cs" />
-    <Compile Include="Loggers\VisualStudioOutputLogger.cs" />
+    <Compile Include="Classes\BaseWorker.cs" />
+    <Compile Include="Classes\HoursRateWorker.cs" />
+    <Compile Include="Classes\MonthRateWorker.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SpaceShip.cs" />
-    <Compile Include="Vector2D.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
