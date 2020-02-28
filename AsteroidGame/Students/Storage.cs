@@ -11,17 +11,22 @@ namespace Students
     abstract class Storage<TItem> : IEnumerable<TItem>
     {
         protected readonly List<TItem> _Items = new List<TItem>();
+        protected Action<TItem> _AddObservers;
+        protected Action<TItem> _RemoveObservers;
 
         public void Add(TItem Item)
         {
             if (_Items.Contains(Item)) return;
             _Items.Add(Item);
-
+            _AddObservers?.Invoke(Item);
         }
 
         public bool Remove(TItem Item)
         {
-            return _Items.Remove(Item);
+            var result = _Items.Remove(Item);
+            if (result)
+                _RemoveObservers?.Invoke(Item);
+            return result;
         }
 
         public void Clear()
@@ -43,7 +48,16 @@ namespace Students
         }
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-        
+
+        public void SubscribeToAdd(Action<TItem> Observer)
+        {
+            _AddObservers = Observer;
+        }
+
+        public void SubscribeToRemove(Action<TItem> Observer)
+        {
+            _RemoveObservers = Observer;
+        }
     }
 
     class Dekanat : Storage<Student>

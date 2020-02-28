@@ -20,10 +20,22 @@ namespace Students
             return result;
         }
 
+        private static void OnStudentAdd(Student Student)
+        {
+            Console.WriteLine("Студент {0} добавлен", Student.Name);
+        }
+
+        private static void OnStudentRemove(Student Student)
+        {
+            Console.WriteLine("Студент {0} удален", Student.Name);
+        }
 
         static void Main(string[] args)
         {
             var dekanat = new Dekanat();
+            dekanat.SubscribeToAdd(OnStudentAdd);
+            dekanat.SubscribeToRemove(OnStudentRemove);
+
             var rnd = new Random();
 
             for (var i = 0; i < 100; i++)
@@ -81,6 +93,10 @@ namespace Students
             //ProcessStudentStandard(dekanat2, PrintStudent);
 
             //var metric = GetStudentMetrics(dekanat2, std => std.Name.Length + (int)(student.AverageRating * 10));
+
+            Console.ReadLine();
+            var student_to_remove = dekanat.Skip(65).First();
+            dekanat.Remove(student_to_remove);
 
             Console.ReadLine();
         }
