@@ -30,11 +30,17 @@ namespace Students
             Console.WriteLine("Студент {0} удален", Student.Name);
         }
 
+        private static void GoToVoenkomat(Student Student)
+        {
+            Console.WriteLine("Студент {0} отправлен служить", Student.Name);
+        }
+
         static void Main(string[] args)
         {
             var dekanat = new Dekanat();
             dekanat.SubscribeToAdd(OnStudentAdd);
             dekanat.SubscribeToRemove(OnStudentRemove);
+            dekanat.SubscribeToRemove(GoToVoenkomat);
 
             var rnd = new Random();
 
