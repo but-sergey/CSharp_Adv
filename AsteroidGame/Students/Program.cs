@@ -38,18 +38,23 @@ namespace Students
         static void Main(string[] args)
         {
             var dekanat = new Dekanat();
-            dekanat.SubscribeToAdd(OnStudentAdd);
+            //dekanat.SubscribeToAdd(OnStudentAdd);
             dekanat.SubscribeToRemove(OnStudentRemove);
             dekanat.SubscribeToRemove(GoToVoenkomat);
+            //dekanat.SubscribeToAdd(std => Console.WriteLine("Ещё раз поздравляем студента {0} с поступлением", std.Name));
+
+            dekanat.NewItemAdded += OnStudentAdd;
+            dekanat.ExelentStudentAdded += exelent_student => Console.WriteLine("!!! {0} !!!", exelent_student);
 
             var rnd = new Random();
-
             for (var i = 0; i < 100; i++)
                 dekanat.Add(new Student
                 {
                     Name = $"Student {i + 1}",
                     Ratings = rnd.GetRandomIntValues(20, 2, 6).ToList()
                 });
+
+            dekanat.Add(new Student { Name = "Strange student", Ratings = new List<int> { 5, 5, 5, 4 } });
 
             const string students_data_file = "students.csv";
             dekanat.SaveToFile(students_data_file);

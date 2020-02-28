@@ -10,6 +10,8 @@ namespace Students
 {
     abstract class Storage<TItem> : IEnumerable<TItem>
     {
+        public event Action<TItem> NewItemAdded;
+
         protected readonly List<TItem> _Items = new List<TItem>();
         protected Action<TItem> _AddObservers;
         protected Action<TItem> _RemoveObservers;
@@ -18,7 +20,10 @@ namespace Students
         {
             if (_Items.Contains(Item)) return;
             _Items.Add(Item);
+
             _AddObservers?.Invoke(Item);
+
+            NewItemAdded?.Invoke(Item);
         }
 
         public bool Remove(TItem Item)
@@ -62,6 +67,19 @@ namespace Students
 
     class Dekanat : Storage<Student>
     {
+        public event Action<Student> ExelentStudentAdded;
+
+        public Dekanat()
+        {
+            NewItemAdded += OnNewItemAdded;
+        }
+
+        private void OnNewItemAdded(Student student)
+        {
+            if (student.AverageRating > 4.5)
+                ExelentStudentAdded?.Invoke(student);
+        }
+
         public override void SaveToFile(string FileName)
         {
             using(var file_writer = File.CreateText(FileName))
