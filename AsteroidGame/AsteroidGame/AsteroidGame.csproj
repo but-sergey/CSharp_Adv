@@ -98,6 +98,8 @@
     <None Include="Resources\asteroid.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\ship.png" />
+    <None Include="Resources\spaceship.jpg" />
     <None Include="Resources\background.jpg" />
     <Content Include="Resources\moon.png" />
   </ItemGroup>

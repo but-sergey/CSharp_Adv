@@ -8,7 +8,8 @@ using AsteroidGame.VisualObjects.Interfaces;
 
 namespace AsteroidGame.VisualObjects
 {
-    public class SpaceShip : VisualObject, ICollision
+//    public class SpaceShip : VisualObject, ICollision
+    public class SpaceShip : ImageObject, ICollision
     {
         public event EventHandler ShipDestroyed;
 
@@ -16,16 +17,18 @@ namespace AsteroidGame.VisualObjects
 
         public int Energy => _Energey;
 
-        public SpaceShip(Point Position, Point Direction, Size Size) : base(Position, Direction, Size)
+        public SpaceShip(Point Position, Point Direction, Size ShipSize)
+            : base(Position, Direction, ShipSize, Properties.Resources.ship)
         {
         }
 
-        public override void Draw(Graphics g)
-        {
-            var rect = Rect;
-            g.FillEllipse(Brushes.Blue, rect);
-            g.DrawEllipse(Pens.Yellow, rect);
-        }
+        //public override void Draw(Graphics g)
+        //{
+        //    var rect = Rect;
+        //    g.FillEllipse(Brushes.Blue, rect);
+        //    g.DrawEllipse(Pens.Yellow, rect);
+
+        //}
 
         public override void Update()
         {
