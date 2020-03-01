@@ -14,7 +14,7 @@ namespace AsteroidGame
         [STAThread]
         static void Main()
         {
-            Console.WriteLine($"{DateTime.Now} Игра запущена");
+            //Console.WriteLine($"{DateTime.Now} Игра запущена");
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using AsteroidGame.VisualObjects;
 using AsteroidGame.VisualObjects.Interfaces;
+using System.IO;
 
 namespace AsteroidGame
 {
@@ -15,6 +16,8 @@ namespace AsteroidGame
         private static BufferedGraphicsContext __Context;
         private static BufferedGraphics __Buffer;
 
+        private const string log_name = "game_log.txt"; 
+        
         private const int frame_timeout = 10;
 
         public static Random rand = new Random();
@@ -120,9 +123,13 @@ namespace AsteroidGame
             __GameObjects = game_objects.ToArray();
             __Bullets.Clear();
             __Ship = new SpaceShip(new Point(10, 400), new Point(5, 5), new Size(60, 30));
+
             __Ship.ShipCollisioned += OnShipCollisioned_LogConcole;
-            __Ship.ShipDestroyed += OnShipDestroyed_LogConsole;
+            __Ship.ShipCollisioned += OnShipCollisioned_LogFile;
+
             __Ship.ShipDestroyed += OnShipDestroyed;
+            __Ship.ShipDestroyed += OnShipDestroyed_LogConsole;
+            __Ship.ShipDestroyed += OnShipDestroyed_LogFile;
 
             timer.Start();
         }
@@ -135,6 +142,16 @@ namespace AsteroidGame
         private static void OnShipDestroyed_LogConsole(object Sender, EventArgs E)
         {
             Console.WriteLine($"{DateTime.Now} Космический корабль уничтожен!");
+        }
+
+        private static void OnShipCollisioned_LogFile(object sender, EventArgs e)
+        {
+            File.AppendAllText(log_name, $"{DateTime.Now} Космический корабль столкнулся с астероидом! Energy = {__Ship.Energy}\n");
+        }
+
+        private static void OnShipDestroyed_LogFile(object Sender, EventArgs E)
+        {
+            File.AppendAllText(log_name, $"{DateTime.Now} Космический корабль уничтожен!\n\n");
         }
 
         private static void OnShipDestroyed(object Sender, EventArgs E)
