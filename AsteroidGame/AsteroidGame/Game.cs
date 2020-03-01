@@ -120,9 +120,21 @@ namespace AsteroidGame
             __GameObjects = game_objects.ToArray();
             __Bullets.Clear();
             __Ship = new SpaceShip(new Point(10, 400), new Point(5, 5), new Size(60, 30));
+            __Ship.ShipCollisioned += OnShipCollisioned_LogConcole;
+            __Ship.ShipDestroyed += OnShipDestroyed_LogConsole;
             __Ship.ShipDestroyed += OnShipDestroyed;
 
             timer.Start();
+        }
+
+        private static void OnShipCollisioned_LogConcole(object sender, EventArgs e)
+        {
+            Console.WriteLine($"{DateTime.Now} Космический корабль столкнулся с астероидом! Energy = {__Ship.Energy}");
+        }
+
+        private static void OnShipDestroyed_LogConsole(object Sender, EventArgs E)
+        {
+            Console.WriteLine($"{DateTime.Now} Космический корабль уничтожен!");
         }
 
         private static void OnShipDestroyed(object Sender, EventArgs E)

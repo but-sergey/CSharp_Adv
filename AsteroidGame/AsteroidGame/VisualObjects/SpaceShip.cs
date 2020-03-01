@@ -12,8 +12,9 @@ namespace AsteroidGame.VisualObjects
     public class SpaceShip : ImageObject, ICollision
     {
         public event EventHandler ShipDestroyed;
+        public event EventHandler ShipCollisioned;
 
-        private int _Energey = 100;
+        private int _Energey = 5;
 
         public int Energy => _Energey;
 
@@ -37,7 +38,7 @@ namespace AsteroidGame.VisualObjects
         public void ChangeEnergy(int delta)
         {
             _Energey += delta;
-            if (_Energey < 0)
+            if (_Energey <= 0)
                 ShipDestroyed?.Invoke(this, EventArgs.Empty);
         }
 
@@ -56,12 +57,16 @@ namespace AsteroidGame.VisualObjects
         public bool CheckCollision(ICollision obj)
         {
             var is_collision = Rect.IntersectsWith(obj.Rect);
-            if(is_collision && obj is Asteroid asteroid)
+            if (is_collision && obj is Asteroid asteroid)
             {
                 //obj = null;
                 ChangeEnergy(-asteroid.Power);
+
+                if(_Energey > 0)
+                    ShipCollisioned.Invoke(this, EventArgs.Empty);
             }
             return is_collision;
+
         }
     }
 }
