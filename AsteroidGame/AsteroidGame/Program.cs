@@ -14,6 +14,8 @@ namespace AsteroidGame
         [STAThread]
         static void Main()
         {
+            Console.WriteLine($"{DateTime.Now} Application run.");
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
