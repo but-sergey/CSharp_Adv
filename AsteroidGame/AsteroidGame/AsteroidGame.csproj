@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="VisualObjects\AidKit.cs" />
     <Compile Include="VisualObjects\Back.cs" />
     <Compile Include="Exceptions\VisualObjectSizeException.cs" />
     <Compile Include="Game.cs" />
@@ -104,6 +105,7 @@
     <None Include="Resources\ship.png" />
     <None Include="Resources\spaceship.jpg" />
     <None Include="Resources\background.jpg" />
+    <None Include="Resources\aid_kit.png" />
     <Content Include="Resources\moon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -42,13 +42,27 @@ namespace AsteroidGame
 
         public const int bullet_speed = 10;
 
+        public const int ship_start_energy = 50;
+        public const int ship_height = 30;
+        public const int ship_width = 60;
+
+        public const int aidkit_energy = 10;
+        public const int aidkit_height = 40;
+        public const int aidkit_width = 40;
+        public const int aidkit_min_speed = 3;
+        public const int aidkit_max_speed = 7;
+
         private static SpaceShip __Ship;
         private static VisualObject[] __GameObjects;
+        private static AidKit __AidKit;
         private static List<Bullet> __Bullets = new List<Bullet>();
         private static Back[] __Background = new Back[2];
 
         public static int Width { get; set; }
         public static int Height { get; set; }
+
+        private static int __Score = 0;
+        public static int Score { get => __Score; private set => __Score = value; }
 
         private static Timer timer = new Timer();
 
@@ -122,10 +136,15 @@ namespace AsteroidGame
 
             __GameObjects = game_objects.ToArray();
             __Bullets.Clear();
-            __Ship = new SpaceShip(new Point(10, 400), new Point(5, 5), new Size(60, 30));
+            __Ship = new SpaceShip(new Point(10, 400), new Point(5, 5), new Size(ship_width, ship_height));
 
-            __Ship.ShipCollisioned += OnShipCollisioned_LogConcole;
-            __Ship.ShipCollisioned += OnShipCollisioned_LogFile;
+            __AidKit = null;
+
+            __Ship.ShipEnergyDec += OnShipEnergyDec_LogConsole;
+            __Ship.ShipEnergyDec += OnShipEnergyDec_LogFile;
+
+            __Ship.ShipEnergyInc += OnShipEnergyInc_LogConsole;
+            __Ship.ShipEnergyInc += OnShipEnergyInc_LogFile;
 
             __Ship.ShipDestroyed += OnShipDestroyed;
             __Ship.ShipDestroyed += OnShipDestroyed_LogConsole;
@@ -134,7 +153,12 @@ namespace AsteroidGame
             timer.Start();
         }
 
-        private static void OnShipCollisioned_LogConcole(object sender, EventArgs e)
+        private static void OnShipEnergyInc_LogConsole(object sender, EventArgs e)
+        {
+            Console.WriteLine($"{DateTime.Now} Космический корабль поймал аптечку! Energy = {__Ship.Energy}");
+        }
+
+        private static void OnShipEnergyDec_LogConsole(object sender, EventArgs e)
         {
             Console.WriteLine($"{DateTime.Now} Космический корабль столкнулся с астероидом! Energy = {__Ship.Energy}");
         }
@@ -144,7 +168,12 @@ namespace AsteroidGame
             Console.WriteLine($"{DateTime.Now} Космический корабль уничтожен!");
         }
 
-        private static void OnShipCollisioned_LogFile(object sender, EventArgs e)
+        private static void OnShipEnergyInc_LogFile(object sender, EventArgs e)
+        {
+            File.AppendAllText(log_name, $"{DateTime.Now} Космический корабль поймал аптечку! Energy = {__Ship.Energy}");
+        }
+
+        private static void OnShipEnergyDec_LogFile(object sender, EventArgs e)
         {
             File.AppendAllText(log_name, $"{DateTime.Now} Космический корабль столкнулся с астероидом! Energy = {__Ship.Energy}\n");
         }
@@ -169,26 +198,28 @@ namespace AsteroidGame
             var g = __Buffer.Graphics;
             g.Clear(Color.Black);
 
-            __Background[0].Draw(g);
-            __Background[1].Draw(g);
-
+            for(var i=0;i<__Background.Length;i++)
+                __Background[i].Draw(g);
+            
             foreach (var visual_object in __GameObjects)
                 visual_object?.Draw(g);
 
             __Ship.Draw(g);
+            __AidKit?.Draw(g);
 
             foreach(var bullet in __Bullets)
                 bullet.Draw(g);
 
-            g.DrawString($"Energy: {__Ship.Energy}", new Font(FontFamily.GenericSansSerif, 14, FontStyle.Italic), Brushes.White, 10, 10);
+            g.DrawString($"Energy: {__Ship.Energy}", new Font(FontFamily.GenericSansSerif, 14, FontStyle.Italic), Brushes.Orange, 10, 10);
+            g.DrawString($"Score: {Score}", new Font(FontFamily.GenericSansSerif, 14, FontStyle.Italic), Brushes.Green, Width - 150, 10);
 
             __Buffer.Render();
         }
 
         public static void Update()
         {
-            __Background[0].Update();
-            __Background[1].Update();
+            for(var i = 0; i < __Background.Length; i++)
+                __Background[i].Update();
 
             foreach (var visual_object in __GameObjects)
                 visual_object?.Update();
@@ -196,28 +227,40 @@ namespace AsteroidGame
             foreach(var bullet in __Bullets)
                 bullet.Update();
 
-            for(var i = 0; i < __GameObjects.Length; i++)
+            if(__AidKit == null && __Ship.Energy < ship_start_energy)
+            {
+                __AidKit = new AidKit(new Point(Game.Width + Game.rand.Next(0, 500), Game.rand.Next(0, Game.Height)),
+                            new Point(-rand.Next(aidkit_min_speed, aidkit_max_speed), 0),
+                            new Size(aidkit_width, aidkit_height));
+            }
+
+            __AidKit?.Update();
+
+            if(__AidKit != null && __Ship.CheckCollision(__AidKit))
+            {
+                //__Ship.ChangeEnergy(__AidKit.Power);
+                __AidKit = null;
+            }
+
+            for (var i = 0; i < __GameObjects.Length; i++)
             {
                 var obj = __GameObjects[i];
                 if (obj is ICollision)
                 {
                     var collision_object = (ICollision)obj;
                     if (__Ship.CheckCollision(collision_object))
-                        //__GameObjects[i] = null;
                         __GameObjects[i] = new Asteroid(new Point(rand.Next(Width, 2 * Width), rand.Next(0, Height)),
                                             new Point(-rand.Next(asteroid_min_speed, asteroid_max_speed), 0),
                                             asteroid_size);
+
                     var bullets_to_remove = new List<Bullet>();
-                    foreach(var bullet in __Bullets)
+                    foreach (var bullet in __Bullets)
                         if (bullet.CheckCollision(collision_object))
                         {
-                            //__Bullet = new Bullet(new Random().Next(Height));
-                            bullets_to_remove.Add(bullet);// __Bullets.Remove(bullet);
-                            //__GameObjects[i] = new Asteroid(new Point(rand.Next(Width, 2 * Width), rand.Next(0, Height)),
-                            //                    new Point(-rand.Next(asteroid_min_speed, asteroid_max_speed), 0),
-                            //                    asteroid_size);
+                            Score += 2 * ((Asteroid)__GameObjects[i]).Power;
+
+                            bullets_to_remove.Add(bullet);
                             __GameObjects[i] = null;
-                            //MessageBox.Show("Астероид уничтожен!", "Столкновение", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         }
                     foreach (var bullet in bullets_to_remove)
                     {
@@ -225,6 +268,7 @@ namespace AsteroidGame
                     }
                 }
             }
+
         }
     }
 }

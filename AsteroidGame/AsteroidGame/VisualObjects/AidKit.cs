@@ -8,13 +8,11 @@ using System.Threading.Tasks;
 
 namespace AsteroidGame.VisualObjects
 {
-    public class Asteroid : ImageObject, ICollision
+    public class AidKit : ImageObject, ICollision
     {
-        public event EventHandler AsteroidDestroyed;
+        public int Power { get; set; } = 10;
 
-        public int Power { get; set; } = 5;
-
-        public Asteroid(Point Position, Point Direction, int ImageSize) : base(Position, Direction, new Size(ImageSize, ImageSize), Properties.Resources.asteroid)
+        public AidKit(Point Position, Point Direction, Size AidKitSize) : base(Position, Direction, AidKitSize, Properties.Resources.aid_kit)
         {
         }
 
@@ -25,7 +23,7 @@ namespace AsteroidGame.VisualObjects
             _Position = new Point(_Position.X + _Direction.X, _Position.Y);
             if (_Position.X < -_Size.Width)
             {
-                _Position = new Point(Game.Width + _Size.Width, Game.rand.Next(0, Game.Height));
+                _Position = new Point(Game.Width + _Size.Width + Game.rand.Next(0, 200), Game.rand.Next(0, Game.Height));
             }
         }
 
