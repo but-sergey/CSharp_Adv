@@ -20,6 +20,10 @@ namespace AsteroidGame
         
         private const int frame_timeout = 25;
 
+        private static bool move_up = false;
+        private static bool move_down = false;
+        private static bool shoot = false;
+
         public static Random rand = new Random();
 
         public const int moon_height = -100;
@@ -73,11 +77,6 @@ namespace AsteroidGame
             Width = form.Width;
             Height = form.Height;
 
-            //if (Width > 1500 || Width < 0)
-            //    throw new ArgumentOutOfRangeException("Ширина игрового поля меньше 0 или более 1500");
-            //if (Height > 1000 || Height < 0)
-            //    throw new ArgumentOutOfRangeException("Высота игрового поля меньше 0 или более 1000");
-
             __Context = BufferedGraphicsManager.Current;
             var g = form.CreateGraphics();
             __Buffer = __Context.Allocate(g, new Rectangle(0, 0, Width, Height));
@@ -86,21 +85,26 @@ namespace AsteroidGame
             timer.Tick += OnTimerTick;
 
             form.KeyDown += OnFormKeyDown;
+            form.KeyUp += Form_KeyUp;
+        }
+
+        private static void Form_KeyUp(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.ControlKey:   shoot = false; break;
+                case Keys.Up:           move_up = false; break;
+                case Keys.Down:         move_down = false; break;
+            }
         }
 
         private static void OnFormKeyDown(object sender, KeyEventArgs e)
         {
             switch(e.KeyCode)
             {
-                case Keys.ControlKey:
-                    __Bullets.Add(new Bullet(new Point(50, __Ship.Rect.Y + __Ship.Rect.Height / 2 - 1)));
-                    break;
-                case Keys.Up:
-                    __Ship.MoveUp();
-                    break;
-                case Keys.Down:
-                    __Ship.MoveDown();
-                    break;
+                case Keys.ControlKey:   shoot = true; break;
+                case Keys.Up:           move_up = true; break;
+                case Keys.Down:         move_down = true; break;
             }
         }
 
@@ -227,7 +231,16 @@ namespace AsteroidGame
 
         public static void Update()
         {
-            for(var i = 0; i < __Background.Length; i++)
+            // обработка команд
+            if(shoot)
+                __Bullets.Add(new Bullet(new Point(50, __Ship.Rect.Y + __Ship.Rect.Height / 2 - 1)));
+            if(move_up)
+                __Ship.MoveUp();
+            if(move_down)
+                __Ship.MoveDown();
+
+            // основной блок
+            for (var i = 0; i < __Background.Length; i++)
                 __Background[i].Update();
 
             foreach (var visual_object in __GameObjects)
