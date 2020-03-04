@@ -23,6 +23,7 @@ namespace AsteroidGame
         private static bool move_up = false;
         private static bool move_down = false;
         private static bool shoot = false;
+        private static bool bullet_added = false;
 
         public static Random rand = new Random();
 
@@ -40,8 +41,8 @@ namespace AsteroidGame
         public static Brush star_brush = Brushes.DarkGray;
 
         public const int asteroid_size = 60;
-        public const int asteroid_min_speed = 3;
-        public const int asteroid_max_speed = 6;
+        public static int asteroid_min_speed = 3;
+        public static int asteroid_max_speed = 6;
         public const int clear_zone = 200;           // зона перед кораблем, в которой не генерируются астероиды
         public static int asteroid_count = 10;
 
@@ -92,7 +93,7 @@ namespace AsteroidGame
         {
             switch (e.KeyCode)
             {
-                case Keys.ControlKey:   shoot = false; break;
+                case Keys.ControlKey:   shoot = false; bullet_added = false; break;
                 case Keys.Up:           move_up = false; break;
                 case Keys.Down:         move_down = false; break;
             }
@@ -149,48 +150,49 @@ namespace AsteroidGame
 
             __AidKit = null;
 
-            __Ship.ShipEnergyDec += OnShipEnergyDec_LogConsole;
-            __Ship.ShipEnergyDec += OnShipEnergyDec_LogFile;
+            //__Ship.ShipEnergyDec += OnShipEnergyDec_LogConsole;
+            //__Ship.ShipEnergyDec += OnShipEnergyDec_LogFile;
 
-            __Ship.ShipEnergyInc += OnShipEnergyInc_LogConsole;
-            __Ship.ShipEnergyInc += OnShipEnergyInc_LogFile;
+            //__Ship.ShipEnergyInc += OnShipEnergyInc_LogConsole;
+            //__Ship.ShipEnergyInc += OnShipEnergyInc_LogFile;
+
+            //__Ship.ShipDestroyed += OnShipDestroyed_LogConsole;
+            //__Ship.ShipDestroyed += OnShipDestroyed_LogFile;
 
             __Ship.ShipDestroyed += OnShipDestroyed;
-            __Ship.ShipDestroyed += OnShipDestroyed_LogConsole;
-            __Ship.ShipDestroyed += OnShipDestroyed_LogFile;
 
             timer.Start();
         }
 
-        private static void OnShipEnergyInc_LogConsole(object sender, EventArgs e)
-        {
-            Console.WriteLine($"{DateTime.Now} Космический корабль поймал аптечку! Energy = {__Ship.Energy}");
-        }
+        //private static void OnShipEnergyInc_LogConsole(object sender, EventArgs e)
+        //{
+        //    Console.WriteLine($"{DateTime.Now} Космический корабль поймал аптечку! Energy = {__Ship.Energy}");
+        //}
 
-        private static void OnShipEnergyDec_LogConsole(object sender, EventArgs e)
-        {
-            Console.WriteLine($"{DateTime.Now} Космический корабль столкнулся с астероидом! Energy = {__Ship.Energy}");
-        }
+        //private static void OnShipEnergyDec_LogConsole(object sender, EventArgs e)
+        //{
+        //    Console.WriteLine($"{DateTime.Now} Космический корабль столкнулся с астероидом! Energy = {__Ship.Energy}");
+        //}
 
-        private static void OnShipDestroyed_LogConsole(object Sender, EventArgs E)
-        {
-            Console.WriteLine($"{DateTime.Now} Космический корабль уничтожен!");
-        }
+        //private static void OnShipDestroyed_LogConsole(object Sender, EventArgs E)
+        //{
+        //    Console.WriteLine($"{DateTime.Now} Космический корабль уничтожен!");
+        //}
 
-        private static void OnShipEnergyInc_LogFile(object sender, EventArgs e)
-        {
-            File.AppendAllText(log_name, $"{DateTime.Now} Космический корабль поймал аптечку! Energy = {__Ship.Energy}");
-        }
+        //private static void OnShipEnergyInc_LogFile(object sender, EventArgs e)
+        //{
+        //    File.AppendAllText(log_name, $"{DateTime.Now} Космический корабль поймал аптечку! Energy = {__Ship.Energy}");
+        //}
 
-        private static void OnShipEnergyDec_LogFile(object sender, EventArgs e)
-        {
-            File.AppendAllText(log_name, $"{DateTime.Now} Космический корабль столкнулся с астероидом! Energy = {__Ship.Energy}\n");
-        }
+        //private static void OnShipEnergyDec_LogFile(object sender, EventArgs e)
+        //{
+        //    File.AppendAllText(log_name, $"{DateTime.Now} Космический корабль столкнулся с астероидом! Energy = {__Ship.Energy}\n");
+        //}
 
-        private static void OnShipDestroyed_LogFile(object Sender, EventArgs E)
-        {
-            File.AppendAllText(log_name, $"{DateTime.Now} Космический корабль уничтожен!\n\n");
-        }
+        //private static void OnShipDestroyed_LogFile(object Sender, EventArgs E)
+        //{
+        //    File.AppendAllText(log_name, $"{DateTime.Now} Космический корабль уничтожен!\n\n");
+        //}
 
         private static void OnShipDestroyed(object Sender, EventArgs E)
         {
@@ -232,9 +234,12 @@ namespace AsteroidGame
         public static void Update()
         {
             // обработка команд
-            if(shoot)
+            if(shoot && !bullet_added)
+            {
                 __Bullets.Add(new Bullet(new Point(50, __Ship.Rect.Y + __Ship.Rect.Height / 2 - 1)));
-            if(move_up)
+                bullet_added = true; // одно нажатие - одна пуля ))
+            }
+            if (move_up)
                 __Ship.MoveUp();
             if(move_down)
                 __Ship.MoveDown();
@@ -305,6 +310,8 @@ namespace AsteroidGame
             {
                 asteroid_count += 5;
                 asteroid_to_renew_count = asteroid_count;
+                asteroid_min_speed++;
+                asteroid_max_speed++;
             }
             // генерация астероидов
             for (var i = 0; i < asteroid_to_renew_count; i++)
