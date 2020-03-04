@@ -18,7 +18,7 @@ namespace AsteroidGame
 
         private const string log_name = "game_log.txt"; 
         
-        private const int frame_timeout = 10;
+        private const int frame_timeout = 25;
 
         public static Random rand = new Random();
 
@@ -31,14 +31,15 @@ namespace AsteroidGame
         public const int star_max_size = 10;
         public const int star_min_speed = 10;
         public const int star_max_speed = 20;
-        public const int star_count = 75;
+        public const int star_count = 25;
         public static Pen star_pen = Pens.DarkGray;
         public static Brush star_brush = Brushes.DarkGray;
 
         public const int asteroid_size = 60;
         public const int asteroid_min_speed = 3;
         public const int asteroid_max_speed = 6;
-        public const int asteroid_count = 10;
+        public const int clear_zone = 200;           // зона перед кораблем, в которой не генерируются астероиды
+        public static int asteroid_count = 10;
 
         public const int bullet_speed = 10;
 
@@ -53,8 +54,9 @@ namespace AsteroidGame
         public const int aidkit_max_speed = 7;
 
         private static SpaceShip __Ship;
-        private static VisualObject[] __GameObjects;
         private static AidKit __AidKit;
+        private static VisualObject[] __GameObjects;
+        private static List<Asteroid> __Asteroids = new List<Asteroid>();
         private static List<Bullet> __Bullets = new List<Bullet>();
         private static Back[] __Background = new Back[2];
 
@@ -71,10 +73,10 @@ namespace AsteroidGame
             Width = form.Width;
             Height = form.Height;
 
-            if (Width > 1500 || Width < 0)
-                throw new ArgumentOutOfRangeException("Ширина игрового поля меньше 0 или более 1500");
-            if (Height > 1000 || Height < 0)
-                throw new ArgumentOutOfRangeException("Высота игрового поля меньше 0 или более 1000");
+            //if (Width > 1500 || Width < 0)
+            //    throw new ArgumentOutOfRangeException("Ширина игрового поля меньше 0 или более 1500");
+            //if (Height > 1000 || Height < 0)
+            //    throw new ArgumentOutOfRangeException("Высота игрового поля меньше 0 или более 1000");
 
             __Context = BufferedGraphicsManager.Current;
             var g = form.CreateGraphics();
@@ -116,6 +118,7 @@ namespace AsteroidGame
             __Background[1] = new Back(new Point(__Background[0].Rect.Right, 0), new Point(-1, 0), Properties.Resources.background.Size);
 
             var game_objects = new List<VisualObject>();
+            var asteroids = new List<Asteroid>();
 
             game_objects.Add(new Moon(new Point(Game.Width, moon_height),
                           new Point(-moon_speed, 0), rand.Next(moon_min_size, moon_max_size)));
@@ -129,12 +132,14 @@ namespace AsteroidGame
 
             for (var i = 0; i < asteroid_count; i++)
             {
-                game_objects.Add(new Asteroid(new Point(rand.Next(750, 750 + Width), rand.Next(0, Height)),
+                __Asteroids.Add(new Asteroid(new Point(rand.Next(clear_zone, Width), rand.Next(0, Height - asteroid_size)),
                                             new Point(-rand.Next(asteroid_min_speed, asteroid_max_speed), 0),
                                             asteroid_size));
             }
 
             __GameObjects = game_objects.ToArray();
+            //__Asteroids = asteroids.ToArray();
+
             __Bullets.Clear();
             __Ship = new SpaceShip(new Point(10, 400), new Point(5, 5), new Size(ship_width, ship_height));
 
@@ -204,6 +209,9 @@ namespace AsteroidGame
             foreach (var visual_object in __GameObjects)
                 visual_object?.Draw(g);
 
+            foreach (var asteroid in __Asteroids)
+                asteroid?.Draw(g);
+
             __Ship.Draw(g);
             __AidKit?.Draw(g);
 
@@ -212,6 +220,7 @@ namespace AsteroidGame
 
             g.DrawString($"Energy: {__Ship.Energy}", new Font(FontFamily.GenericSansSerif, 14, FontStyle.Italic), Brushes.Orange, 10, 10);
             g.DrawString($"Score: {Score}", new Font(FontFamily.GenericSansSerif, 14, FontStyle.Italic), Brushes.Green, Width - 150, 10);
+            g.DrawString($"Asteroids: {__Asteroids.Count}", new Font(FontFamily.GenericSansSerif, 14, FontStyle.Italic), Brushes.AntiqueWhite, 400, 10);
 
             __Buffer.Render();
         }
@@ -223,6 +232,9 @@ namespace AsteroidGame
 
             foreach (var visual_object in __GameObjects)
                 visual_object?.Update();
+
+            foreach (var asteroid in __Asteroids)
+                asteroid?.Update();
 
             foreach(var bullet in __Bullets)
                 bullet.Update();
@@ -242,33 +254,52 @@ namespace AsteroidGame
                 __AidKit = null;
             }
 
-            for (var i = 0; i < __GameObjects.Length; i++)
+            var asteroid_to_renew_count = 0;
+            var asteroid_to_remove = new List<Asteroid>();
+            var bullets_to_remove = new List<Bullet>();
+
+            foreach (var asteroid in __Asteroids)
+            //for (var i = 0; i < __Asteroids.Length; i++)
             {
-                var obj = __GameObjects[i];
-                if (obj is ICollision)
+                if (__Ship.CheckCollision(asteroid))
                 {
-                    var collision_object = (ICollision)obj;
-                    if (__Ship.CheckCollision(collision_object))
-                        __GameObjects[i] = new Asteroid(new Point(rand.Next(Width, 2 * Width), rand.Next(0, Height)),
-                                            new Point(-rand.Next(asteroid_min_speed, asteroid_max_speed), 0),
-                                            asteroid_size);
-
-                    var bullets_to_remove = new List<Bullet>();
-                    foreach (var bullet in __Bullets)
-                        if (bullet.CheckCollision(collision_object))
-                        {
-                            Score += 2 * ((Asteroid)__GameObjects[i]).Power;
-
-                            bullets_to_remove.Add(bullet);
-                            __GameObjects[i] = null;
-                        }
-                    foreach (var bullet in bullets_to_remove)
-                    {
-                        __Bullets.Remove(bullet);
-                    }
+                    asteroid_to_remove.Add(asteroid);
+                    asteroid_to_renew_count++;
                 }
+
+                foreach (var bullet in __Bullets)
+                    if (bullet.CheckCollision(asteroid))
+                    {
+                        Score += 2 * asteroid.Power;
+
+                        bullets_to_remove.Add(bullet);
+                        asteroid_to_remove.Add(asteroid);
+                    }
             }
 
+            // удаление сбитых астероидов
+            foreach (var asteroid in asteroid_to_remove)
+            {
+                __Asteroids.Remove(asteroid);
+            }
+            // удаление попавших пуль
+            foreach (var bullet in bullets_to_remove)
+            {
+                __Bullets.Remove(bullet);
+            }
+            // если астероиды закончились - то накинуть ))
+            if(__Asteroids.Count + asteroid_to_renew_count == 0)
+            {
+                asteroid_count += 5;
+                asteroid_to_renew_count = asteroid_count;
+            }
+            // генерация астероидов
+            for (var i = 0; i < asteroid_to_renew_count; i++)
+            {
+                __Asteroids.Add(new Asteroid(new Point(rand.Next(clear_zone, Width), rand.Next(0, Height - asteroid_size)),
+                                    new Point(-rand.Next(asteroid_min_speed, asteroid_max_speed), 0),
+                                    asteroid_size));
+            }
         }
     }
 }
