@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{ECBA4BFE-D4D1-44D9-AD09-438E445D14D4}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <RootNamespace>AsteroidGame</RootNamespace>
     <AssemblyName>AsteroidGame</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
@@ -32,6 +32,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -46,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="VisualObjects\AidKit.cs" />
     <Compile Include="VisualObjects\Back.cs" />
     <Compile Include="Exceptions\VisualObjectSizeException.cs" />
     <Compile Include="Game.cs" />
@@ -98,7 +102,10 @@
     <None Include="Resources\asteroid.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\ship.png" />
+    <None Include="Resources\spaceship.jpg" />
     <None Include="Resources\background.jpg" />
+    <None Include="Resources\aid_kit.png" />
     <Content Include="Resources\moon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
