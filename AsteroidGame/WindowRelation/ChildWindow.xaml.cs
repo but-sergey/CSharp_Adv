@@ -10,19 +10,25 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace HelloWPF
+namespace WindowRelation
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for ChildWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class ChildWindow : Window
     {
-        public MainWindow()
+        public ChildWindow()
         {
             InitializeComponent();
+        }
+
+        public string ViewModel { get; set; }
+        public void ShowViewModel()
+        {
+            textBlock.Text = ViewModel;
+            this.Owner.Background = new SolidColorBrush(Colors.Crimson);
         }
     }
 }

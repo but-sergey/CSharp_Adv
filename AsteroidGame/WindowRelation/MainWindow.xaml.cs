@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace HelloWPF
+namespace WindowRelation
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -23,6 +23,15 @@ namespace HelloWPF
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            ChildWindow childWindow = new ChildWindow();
+            childWindow.ViewModel = "ViewModel";
+            childWindow.Owner = this;
+            childWindow.Show();
+            childWindow.ShowViewModel();
         }
     }
 }
