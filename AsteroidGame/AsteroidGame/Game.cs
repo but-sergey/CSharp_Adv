@@ -65,10 +65,12 @@ namespace AsteroidGame
         private static List<Bullet> __Bullets = new List<Bullet>();
         private static Back[] __Background = new Back[2];
 
-        private const int frame_timeout = 10;
+        public static int Width { get; set; }
+        public static int Height { get; set; }
 
         private static int __Score = 0;
         public static int Score { get => __Score; private set => __Score = value; }
+
         private static Timer timer = new Timer();
 
         public static void Initialize(Form form)
@@ -105,11 +107,14 @@ namespace AsteroidGame
                 case Keys.Up:           move_up = true; break;
                 case Keys.Down:         move_down = true; break;
             }
+        }
 
-        private static VisualObject[] __GameObjects;
-        private static Bullet __Bullet;
-        private static Back[] __Background = new Back[2];
-        
+        private static void OnTimerTick(object sender, EventArgs e)
+        {
+            Update();
+            Draw();
+        }
+
         public static void Load()
         {
             Random rand = new Random();
