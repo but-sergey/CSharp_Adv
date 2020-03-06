@@ -13,7 +13,7 @@ namespace AsteroidGame.VisualObjects
         private const int __BulletSizeX = 20;
         private const int __BulletSizeY = 5;
 
-        public Bullet(int Position) : base(new Point(0, Position), Point.Empty, new Size(__BulletSizeX, __BulletSizeY))
+        public Bullet(Point Position) : base(Position, Point.Empty, new Size(__BulletSizeX, __BulletSizeY))
         {
         }
 
@@ -26,7 +26,7 @@ namespace AsteroidGame.VisualObjects
 
         public override void Update()
         {
-            _Position = new Point(_Position.X + 5, _Position.Y);
+            _Position = new Point(_Position.X + Game.bullet_speed, _Position.Y);
         }
     }
 }

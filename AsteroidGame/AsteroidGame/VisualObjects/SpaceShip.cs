@@ -8,23 +8,19 @@ using AsteroidGame.VisualObjects.Interfaces;
 
 namespace AsteroidGame.VisualObjects
 {
-    public class SpaceShip : VisualObject, ICollision
+    public class SpaceShip : ImageObject, ICollision
     {
         public event EventHandler ShipDestroyed;
+        public event EventHandler ShipEnergyDec;
+        public event EventHandler ShipEnergyInc;
 
-        private int _Energey = 100;
+        private int _Energey = 50;
 
         public int Energy => _Energey;
 
-        public SpaceShip(Point Position, Point Direction, Size Size) : base(Position, Direction, Size)
+        public SpaceShip(Point Position, Point Direction, Size ShipSize)
+            : base(Position, Direction, ShipSize, Properties.Resources.ship)
         {
-        }
-
-        public override void Draw(Graphics g)
-        {
-            var rect = Rect;
-            g.FillEllipse(Brushes.Blue, rect);
-            g.DrawEllipse(Pens.Yellow, rect);
         }
 
         public override void Update()
@@ -34,7 +30,7 @@ namespace AsteroidGame.VisualObjects
         public void ChangeEnergy(int delta)
         {
             _Energey += delta;
-            if (_Energey < 0)
+            if (_Energey <= 0)
                 ShipDestroyed?.Invoke(this, EventArgs.Empty);
         }
 
@@ -53,11 +49,24 @@ namespace AsteroidGame.VisualObjects
         public bool CheckCollision(ICollision obj)
         {
             var is_collision = Rect.IntersectsWith(obj.Rect);
-            if(is_collision && obj is Asteroid asteroid)
+            if (is_collision)
             {
-                ChangeEnergy(-asteroid.Power);
+                if (obj is Asteroid asteroid)
+                {
+                    //obj = null;
+                    ChangeEnergy(-asteroid.Power);
+
+                    if (_Energey > 0)
+                        ShipEnergyDec.Invoke(this, EventArgs.Empty);
+                }
+                else if (obj is AidKit aidkit)
+                {
+                    ChangeEnergy(aidkit.Power);
+                    ShipEnergyInc.Invoke(this, EventArgs.Empty);
+                }
             }
             return is_collision;
+
         }
     }
 }
