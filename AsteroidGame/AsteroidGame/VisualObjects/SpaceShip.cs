@@ -42,7 +42,7 @@ namespace AsteroidGame.VisualObjects
 
         public void MoveDown()
         {
-            if (_Position.Y - _Size.Height < Game.Height)
+            if (_Position.Y + _Size.Height < Game.Height)
                 _Position = new Point(_Position.X, _Position.Y + _Direction.Y);
         }
 
@@ -57,12 +57,12 @@ namespace AsteroidGame.VisualObjects
                     ChangeEnergy(-asteroid.Power);
 
                     if (_Energey > 0)
-                        ShipEnergyDec.Invoke(this, EventArgs.Empty);
+                        ShipEnergyDec?.Invoke(this, EventArgs.Empty);
                 }
                 else if (obj is AidKit aidkit)
                 {
                     ChangeEnergy(aidkit.Power);
-                    ShipEnergyInc.Invoke(this, EventArgs.Empty);
+                    ShipEnergyInc?.Invoke(this, EventArgs.Empty);
                 }
             }
             return is_collision;
