@@ -24,10 +24,6 @@ namespace Employees
         { 
             get
             {
-                _emp.Name = txtName.Text;
-                _emp.Age = Int32.Parse(txtAge.Text);
-                _emp.Salary = Double.Parse(txtSalary.Text);
-                _emp.Dep = (Department)cmbDep.SelectedItem;
                 return _emp;
             }
             set
@@ -48,12 +44,12 @@ namespace Employees
 
         private void btnOk_Click(object sender, RoutedEventArgs e)
         {
+            _emp.Name = txtName.Text;
+            _emp.Age = Int32.Parse(txtAge.Text);
+            _emp.Salary = Double.Parse(txtSalary.Text);
+            _emp.Dep = (Department)cmbDep.SelectedItem;
 
-        }
-
-        private void btnCancel_Click(object sender, RoutedEventArgs e)
-        {
-
+            this.DialogResult = true;
         }
     }
 }

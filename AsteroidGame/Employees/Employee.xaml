@@ -29,7 +29,7 @@
         </WrapPanel>
         <WrapPanel VerticalAlignment="Bottom" HorizontalAlignment="Center">
             <Button Name="btnOk" IsDefault="True" Margin="10" Width="75" Click="btnOk_Click">OK</Button>
-            <Button Name="btnCancel" IsCancel="True" Margin="10" Width="75" Click="btnCancel_Click">Отмена</Button>
+            <Button Name="btnCancel" IsCancel="True" Margin="10" Width="75">Отмена</Button>
         </WrapPanel>
     </StackPanel>
 </Window>

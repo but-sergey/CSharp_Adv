@@ -65,15 +65,26 @@ namespace Employees
         {
             // === временно левые данные ===
             // Ищем департамент "Programmers" для добавления в него сотрудников
-            Department ProgDep = null;
-            foreach (var dep in Departments)
-                if (dep.Name == "Разработчики")
-                {
-                    ProgDep = dep;
-                    break;
-                }
+            //Department ProgDep = null;
+            //foreach (var dep in Departments)
+            //    if (dep.Name == "Разработчики")
+            //    {
+            //        ProgDep = dep;
+            //        break;
+            //    }
 
-            Emps.Add(new Empl() {Name = "Сергей", Age = 26, Salary = 7000, Dep = ProgDep});
+            //Emps.Add(new Empl() {Name = "Сергей", Age = 26, Salary = 7000, Dep = ProgDep});
+            
+            // Создаем нового сотрудника
+            Empl Emp = new Empl();
+            Emps.Add(Emp);
+
+            // Вызываем окно редактирования его данных
+            Employee EmpWindow = new Employee();
+            EmpWindow.cmbDep.ItemsSource = Departments;
+            EmpWindow.Emp = Emp;
+            EmpWindow.ShowDialog();
+
         }
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
@@ -88,6 +99,9 @@ namespace Employees
             EmpWindow.cmbDep.ItemsSource = Departments;
             EmpWindow.Emp = (Empl)lbEmployee.SelectedItem;
             EmpWindow.ShowDialog();
+            // ===
+            // === здесь нужно обновить ListBox...
+            // ===
         }
     }
 
@@ -125,7 +139,7 @@ namespace Employees
         public override string ToString()
         {
             string IsManager = (Id == Dep?.Manager?.Id) ? " (начальник)" : "";
-            return $"{Id}\t{Name}\t{Age}\t{Salary}\t{Dep.Name}{IsManager}";
+            return $"{Id}\t{Name}\t{Age}\t{Salary}\t{Dep?.Name}{IsManager}";
         }
     }
 
