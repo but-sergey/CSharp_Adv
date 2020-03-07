@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -63,18 +64,6 @@ namespace Employees
 
         private void btnAdd_Click(object sender, RoutedEventArgs e)
         {
-            // === временно левые данные ===
-            // Ищем департамент "Programmers" для добавления в него сотрудников
-            //Department ProgDep = null;
-            //foreach (var dep in Departments)
-            //    if (dep.Name == "Разработчики")
-            //    {
-            //        ProgDep = dep;
-            //        break;
-            //    }
-
-            //Emps.Add(new Empl() {Name = "Сергей", Age = 26, Salary = 7000, Dep = ProgDep});
-            
             // Создаем нового сотрудника
             Empl Emp = new Empl();
             Emps.Add(Emp);
@@ -99,9 +88,11 @@ namespace Employees
             EmpWindow.cmbDep.ItemsSource = Departments;
             EmpWindow.Emp = (Empl)lbEmployee.SelectedItem;
             EmpWindow.ShowDialog();
-            // ===
-            // === здесь нужно обновить ListBox...
-            // ===
+
+            // такой вариант обновления ListBox мне кажется не очень корректным
+            // но другого варианта не нашел...
+            lbEmployee.ItemsSource = null;
+            lbEmployee.ItemsSource = Emps;
         }
     }
 
@@ -123,7 +114,7 @@ namespace Employees
         }
     }
 
-    public class Empl
+    public class Empl : INotifyPropertyChanged
     {
         public int Id { get; private set; }
         public string Name { get; set; }
@@ -135,6 +126,8 @@ namespace Employees
         {
             Id = GID.GetEmpId();
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public override string ToString()
         {
