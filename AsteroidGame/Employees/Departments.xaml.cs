@@ -32,7 +32,27 @@ namespace Employees
 
         private void btnAdd_Click(object sender, RoutedEventArgs e)
         {
+            // Создаем новый отдел
+            Dep dep = new Dep();
 
+            // добавляем отдел в коллекцию
+            var deps = (ObservableCollection<Dep>)lbDepartments.ItemsSource;
+            deps.Add(dep);
+
+            // Вызываем окно редактирования его данных
+            Department DepWindow = new Department();
+            DepWindow.Dep = dep;
+            DepWindow.ShowDialog();
+
+            RefreshDepartments();
+        }
+
+        void RefreshDepartments()
+        {
+            // некрасивое обновление списка
+            var temp = lbDepartments.ItemsSource;
+            lbDepartments.ItemsSource = null;
+            lbDepartments.ItemsSource = temp;
         }
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
@@ -41,6 +61,7 @@ namespace Employees
             var deps = (ObservableCollection<Dep>)lbDepartments.ItemsSource;
             deps.Remove((Dep)lbDepartments.SelectedItem);
 
+            RefreshDepartments();
         }
     }
 }

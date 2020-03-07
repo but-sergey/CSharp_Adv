@@ -74,6 +74,15 @@ namespace Employees
             EmpWindow.Emp = Emp;
             EmpWindow.ShowDialog();
 
+            RefreshEmployee();
+        }
+
+        void RefreshEmployee()
+        {
+            // такой вариант обновления ListBox мне кажется не очень корректным
+            // но другого варианта не нашел...
+            lbEmployee.ItemsSource = null;
+            lbEmployee.ItemsSource = Emps;
         }
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
@@ -89,10 +98,7 @@ namespace Employees
             EmpWindow.Emp = (Empl)lbEmployee.SelectedItem;
             EmpWindow.ShowDialog();
 
-            // такой вариант обновления ListBox мне кажется не очень корректным
-            // но другого варианта не нашел...
-            lbEmployee.ItemsSource = null;
-            lbEmployee.ItemsSource = Emps;
+            RefreshEmployee();
         }
 
         private void btnDep_Click(object sender, RoutedEventArgs e)
@@ -101,8 +107,7 @@ namespace Employees
             DepWindow.lbDepartments.ItemsSource = Deps;
             DepWindow.ShowDialog();
 
-            lbEmployee.ItemsSource = null;
-            lbEmployee.ItemsSource = Emps;
+            RefreshEmployee();
         }
     }
 
