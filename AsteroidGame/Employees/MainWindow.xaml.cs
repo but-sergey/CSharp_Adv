@@ -23,7 +23,6 @@ namespace Employees
     {
         public ObservableCollection<Empl> Emps = new ObservableCollection<Empl>();
         public ObservableCollection<Department> Departments = new ObservableCollection<Department>();
-        Employee EmpWindow = new Employee();
 
         public MainWindow()
         {
@@ -85,6 +84,8 @@ namespace Employees
 
         private void lbEmployee_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
+            Employee EmpWindow = new Employee();
+            EmpWindow.cmbDep.ItemsSource = Departments;
             EmpWindow.Emp = (Empl)lbEmployee.SelectedItem;
             EmpWindow.ShowDialog();
         }
@@ -137,6 +138,11 @@ namespace Employees
         public Department()
         {
             Id = GID.GetDepId();
+        }
+
+        public override string ToString()
+        {
+            return $"{Id} - {Name}";
         }
     }
 }

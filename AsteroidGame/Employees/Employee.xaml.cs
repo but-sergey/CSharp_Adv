@@ -27,6 +27,7 @@ namespace Employees
                 _emp.Name = txtName.Text;
                 _emp.Age = Int32.Parse(txtAge.Text);
                 _emp.Salary = Double.Parse(txtSalary.Text);
+                _emp.Dep = (Department)cmbDep.SelectedItem;
                 return _emp;
             }
             set
@@ -36,6 +37,7 @@ namespace Employees
                 txtName.Text = _emp.Name;
                 txtAge.Text = _emp.Age.ToString();
                 txtSalary.Text = _emp.Salary.ToString();
+                cmbDep.SelectedItem = _emp.Dep;
             }
         }
 
