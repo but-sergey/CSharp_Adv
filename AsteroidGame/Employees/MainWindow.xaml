@@ -1,0 +1,19 @@
+﻿<Window x:Class="Employees.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Employees"
+        mc:Ignorable="d"
+        Title="Сотрудники" Height="350" Width="525">
+    <Grid>
+        <ListBox Margin="10" Name="lbEmployee" SelectionMode="Single"
+                 VerticalAlignment="Top" Height="250"></ListBox>
+        <WrapPanel VerticalAlignment="Bottom" HorizontalAlignment="Center">
+            <Button Name="btnAdd" Margin="10" Height="25" Width="70" VerticalAlignment="Bottom"
+                Click="btnAdd_Click">Добавить</Button>
+            <Button Name="btnDelete" Margin="10" Height="25" Width="70" VerticalAlignment="Bottom"
+                Click="btnDelete_Click">Удалить</Button>
+        </WrapPanel>
+    </Grid>
+</Window>
