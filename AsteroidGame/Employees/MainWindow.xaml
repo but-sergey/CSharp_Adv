@@ -8,6 +8,7 @@
         Title="Сотрудники" Height="350" Width="525">
     <Grid>
         <ListBox Margin="10" Name="lbEmployee" SelectionMode="Single"
+                 MouseDoubleClick="lbEmployee_MouseDoubleClick"
                  VerticalAlignment="Top" Height="250"></ListBox>
         <WrapPanel VerticalAlignment="Bottom" HorizontalAlignment="Center">
             <Button Name="btnAdd" Margin="10" Height="25" Width="70" VerticalAlignment="Bottom"

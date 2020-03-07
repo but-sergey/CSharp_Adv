@@ -21,8 +21,9 @@ namespace Employees
     /// </summary>
     public partial class MainWindow : Window
     {
-        ObservableCollection<Employee> Employees = new ObservableCollection<Employee>();
-        ObservableCollection<Department> Departments = new ObservableCollection<Department>();
+        public ObservableCollection<Empl> Emps = new ObservableCollection<Empl>();
+        public ObservableCollection<Department> Departments = new ObservableCollection<Department>();
+        Employee EmpWindow = new Employee();
 
         public MainWindow()
         {
@@ -48,17 +49,17 @@ namespace Employees
 
             // добавляем сотрудников
             // менеджер
-            var ProgManager = new Employee() { Name = "Василий", Age = 22, Salary = 3000, Dep = ProgDep };
-            Employees.Add(ProgManager);
+            var ProgManager = new Empl() { Name = "Василий", Age = 22, Salary = 3000, Dep = ProgDep };
+            Emps.Add(ProgManager);
             // еще сотрудники
-            Employees.Add(new Employee() { Name = "Петр", Age = 25, Salary = 6000, Dep = ProgDep });
-            Employees.Add(new Employee() { Name = "Николай", Age = 23, Salary = 8000, Dep = ProgDep });
+            Emps.Add(new Empl() { Name = "Петр", Age = 25, Salary = 6000, Dep = ProgDep });
+            Emps.Add(new Empl() { Name = "Николай", Age = 23, Salary = 8000, Dep = ProgDep });
 
             // назначаем менеджера департаменту
             ProgDep.Manager = ProgManager;
 
             // связываем элемент ListBox с коллекцией сотрудников
-            lbEmployee.ItemsSource = Employees;
+            lbEmployee.ItemsSource = Emps;
         }
 
         private void btnAdd_Click(object sender, RoutedEventArgs e)
@@ -73,13 +74,19 @@ namespace Employees
                     break;
                 }
 
-            Employees.Add(new Employee() {Name = "Сергей", Age = 26, Salary = 7000, Dep = ProgDep});
+            Emps.Add(new Empl() {Name = "Сергей", Age = 26, Salary = 7000, Dep = ProgDep});
         }
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
             // удаление выделенного сотрудника
-            Employees.Remove((Employee)lbEmployee.SelectedItem);
+            Emps.Remove((Empl)lbEmployee.SelectedItem);
+        }
+
+        private void lbEmployee_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            EmpWindow.Emp = (Empl)lbEmployee.SelectedItem;
+            EmpWindow.ShowDialog();
         }
     }
 
@@ -101,7 +108,7 @@ namespace Employees
         }
     }
 
-    public class Employee
+    public class Empl
     {
         public int Id { get; private set; }
         public string Name { get; set; }
@@ -109,7 +116,7 @@ namespace Employees
         public double Salary { get; set; }
         public Department Dep { get; set; }
 
-        public Employee()
+        public Empl()
         {
             Id = GID.GetEmpId();
         }
@@ -125,7 +132,7 @@ namespace Employees
     {
         public int Id { get; private set; }
         public string Name { get; set; }
-        public Employee Manager { get; set; }
+        public Empl Manager { get; set; }
 
         public Department()
         {
