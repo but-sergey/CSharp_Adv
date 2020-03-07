@@ -47,7 +47,7 @@ namespace Employees
             _emp.Name = txtName.Text;
             _emp.Age = Int32.Parse(txtAge.Text);
             _emp.Salary = Double.Parse(txtSalary.Text);
-            _emp.Dep = (Department)cmbDep.SelectedItem;
+            _emp.Dep = (Dep)cmbDep.SelectedItem;
 
             this.DialogResult = true;
         }

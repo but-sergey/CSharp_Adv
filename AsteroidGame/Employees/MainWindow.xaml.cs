@@ -23,7 +23,7 @@ namespace Employees
     public partial class MainWindow : Window
     {
         public ObservableCollection<Empl> Emps = new ObservableCollection<Empl>();
-        public ObservableCollection<Department> Departments = new ObservableCollection<Department>();
+        public ObservableCollection<Dep> Deps = new ObservableCollection<Dep>();
 
         public MainWindow()
         {
@@ -34,13 +34,13 @@ namespace Employees
         void FillList()
         {
             // Заполняем департаменты
-            Departments.Add(new Department() { Name = "Сисадмины", Manager = null });
-            Departments.Add(new Department() { Name = "Разработчики", Manager = null });
-            Departments.Add(new Department() { Name = "Архитекторы", Manager = null });
+            Deps.Add(new Dep() { Name = "Сисадмины", Manager = null });
+            Deps.Add(new Dep() { Name = "Разработчики", Manager = null });
+            Deps.Add(new Dep() { Name = "Архитекторы", Manager = null });
 
             // Ищем департамент "Programmers" для добавления в него сотрудников
-            Department ProgDep = null;
-            foreach(var dep in Departments)
+            Dep ProgDep = null;
+            foreach(var dep in Deps)
                 if(dep.Name == "Разработчики")
                 {
                     ProgDep = dep;
@@ -70,7 +70,7 @@ namespace Employees
 
             // Вызываем окно редактирования его данных
             Employee EmpWindow = new Employee();
-            EmpWindow.cmbDep.ItemsSource = Departments;
+            EmpWindow.cmbDep.ItemsSource = Deps;
             EmpWindow.Emp = Emp;
             EmpWindow.ShowDialog();
 
@@ -85,12 +85,22 @@ namespace Employees
         private void lbEmployee_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             Employee EmpWindow = new Employee();
-            EmpWindow.cmbDep.ItemsSource = Departments;
+            EmpWindow.cmbDep.ItemsSource = Deps;
             EmpWindow.Emp = (Empl)lbEmployee.SelectedItem;
             EmpWindow.ShowDialog();
 
             // такой вариант обновления ListBox мне кажется не очень корректным
             // но другого варианта не нашел...
+            lbEmployee.ItemsSource = null;
+            lbEmployee.ItemsSource = Emps;
+        }
+
+        private void btnDep_Click(object sender, RoutedEventArgs e)
+        {
+            Departments DepWindow = new Departments();
+            DepWindow.lbDepartments.ItemsSource = Deps;
+            DepWindow.ShowDialog();
+
             lbEmployee.ItemsSource = null;
             lbEmployee.ItemsSource = Emps;
         }
@@ -120,7 +130,7 @@ namespace Employees
         public string Name { get; set; }
         public int Age { get; set; }
         public double Salary { get; set; }
-        public Department Dep { get; set; }
+        public Dep Dep { get; set; }
 
         public Empl()
         {
@@ -136,13 +146,13 @@ namespace Employees
         }
     }
 
-    public class Department
+    public class Dep
     {
         public int Id { get; private set; }
         public string Name { get; set; }
         public Empl Manager { get; set; }
 
-        public Department()
+        public Dep()
         {
             Id = GID.GetDepId();
         }
