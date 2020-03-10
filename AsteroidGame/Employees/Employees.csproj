@@ -75,12 +75,16 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Data\TestData.cs" />
+    <Compile Include="Models\GID.cs" />
+    <Compile Include="Models\Dep.cs" />
     <Compile Include="Department.xaml.cs">
       <DependentUpon>Department.xaml</DependentUpon>
     </Compile>
     <Compile Include="Departments.xaml.cs">
       <DependentUpon>Departments.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\Empl.cs" />
     <Compile Include="Employee.xaml.cs">
       <DependentUpon>Employee.xaml</DependentUpon>
     </Compile>
@@ -111,9 +115,6 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

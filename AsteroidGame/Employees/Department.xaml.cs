@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Employees.Models;
 
 namespace Employees
 {
@@ -33,8 +34,6 @@ namespace Employees
                 txtName.Text = _dep.Name;
             }
         }
-
-
 
         public Department()
         {

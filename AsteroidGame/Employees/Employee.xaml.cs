@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Employees.Models;
 
 namespace Employees
 {
@@ -20,6 +21,7 @@ namespace Employees
     public partial class Employee : Window
     {
         private Empl _emp;
+
         public Empl Emp
         { 
             get

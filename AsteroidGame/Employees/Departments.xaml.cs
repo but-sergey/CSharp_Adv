@@ -12,6 +12,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Employees.Data;
+using Employees.Models;
 
 namespace Employees
 {
@@ -27,41 +29,27 @@ namespace Employees
 
         private void lbDepartments_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-
+            Department DepWindow = new Department();
+            DepWindow.Dep = (Dep)lbDepartments.SelectedItem;
+            DepWindow.ShowDialog();
         }
 
         private void btnAdd_Click(object sender, RoutedEventArgs e)
         {
             // Создаем новый отдел
             Dep dep = new Dep();
-
-            // добавляем отдел в коллекцию
-            var deps = (ObservableCollection<Dep>)lbDepartments.ItemsSource;
-            deps.Add(dep);
+            TestData.Deps.Add(dep);
 
             // Вызываем окно редактирования его данных
             Department DepWindow = new Department();
             DepWindow.Dep = dep;
             DepWindow.ShowDialog();
-
-            RefreshDepartments();
-        }
-
-        void RefreshDepartments()
-        {
-            // некрасивое обновление списка
-            var temp = lbDepartments.ItemsSource;
-            lbDepartments.ItemsSource = null;
-            lbDepartments.ItemsSource = temp;
         }
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
             // удаление выделенного отдела
-            var deps = (ObservableCollection<Dep>)lbDepartments.ItemsSource;
-            deps.Remove((Dep)lbDepartments.SelectedItem);
-
-            RefreshDepartments();
+            TestData.Deps.Remove((Dep)lbDepartments.SelectedItem);
         }
     }
 }

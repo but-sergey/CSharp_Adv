@@ -4,12 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Employees"
+        xmlns:data="clr-namespace:Employees.Data"
+
         mc:Ignorable="d"
         Title="Отделы" Height="250" Width="400">
     <Grid>
-        <ListBox Margin="10" Name="lbDepartments" SelectionMode="Single"
+        <ListView Margin="10" Name="lbDepartments" SelectionMode="Single"
+                 ItemsSource="{x:Static data:TestData.Deps}"
                  MouseDoubleClick="lbDepartments_MouseDoubleClick"
-                 VerticalAlignment="Top" Height="150"></ListBox>
+                 VerticalAlignment="Top" Height="150"></ListView>
         <WrapPanel VerticalAlignment="Bottom" HorizontalAlignment="Center">
             <Button Name="btnAdd" Margin="10" Height="25" Width="70" VerticalAlignment="Bottom"
                 Click="btnAdd_Click">Добавить</Button>

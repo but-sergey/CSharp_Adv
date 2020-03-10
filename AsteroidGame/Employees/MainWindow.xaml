@@ -4,12 +4,27 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Employees"
+        xmlns:m="clr-namespace:Employees.Models"
+        xmlns:data="clr-namespace:Employees.Data"
         mc:Ignorable="d"
         Title="Сотрудники" Height="350" Width="525">
     <Grid>
-        <ListBox Margin="10" Name="lbEmployee" SelectionMode="Single"
+        <ListView Margin="10" Name="lbEmployee" SelectionMode="Single"
+                  ItemsSource="{x:Static data:TestData.Emps}"
                  MouseDoubleClick="lbEmployee_MouseDoubleClick"
-                 VerticalAlignment="Top" Height="250"></ListBox>
+                 VerticalAlignment="Top" Height="250">
+            <ListView.ItemTemplate>
+                <DataTemplate DataType="m:Empl">
+                    <Border BorderThickness="1" BorderBrush="Blue" CornerRadius="5" Padding="1" Margin="1" Width="300">
+                        <StackPanel>
+                            <TextBlock Text="{Binding Id, StringFormat=id: {0}}"/>
+                            <TextBlock Text="{Binding Name, StringFormat=Имя: {0}}"/>
+                            <TextBlock Text="{Binding Dep, StringFormat=Отдел: {0}}"/>
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
         <WrapPanel VerticalAlignment="Bottom" HorizontalAlignment="Center">
             <Button Name="btnAdd" Margin="10" Height="25" Width="70" VerticalAlignment="Bottom"
                 Click="btnAdd_Click">Добавить</Button>
